@@ -1,0 +1,58 @@
+name: CI/CD - Docker Build and Push
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # CUSTOMER SERVICES
+      - name: Build and Push - customer-services
+        run: |
+          docker build -t fahadimran/customer-services ./Cafe_Management_System/customer-services
+          docker push fahadimran/customer-services
+
+      # INVENTORY SERVICES
+      - name: Build and Push - inventory-services
+        run: |
+          docker build -t fahadimran/inventory-services ./Cafe_Management_System/inventory-services
+          docker push fahadimran/inventory-services
+
+      # MENU SERVICES
+      - name: Build and Push - menu-services
+        run: |
+          docker build -t fahadimran/menu-services ./Cafe_Management_System/menu-services
+          docker push fahadimran/menu-services
+
+      # ORDER SERVICES
+      - name: Build and Push - order-services
+        run: |
+          docker build -t fahadimran/order-services ./Cafe_Management_System/order-services
+          docker push fahadimran/order-services
+
+      # PAYMENT SERVICES
+      - name: Build and Push - payment-services
+        run: |
+          docker build -t fahadimran/payment-services ./Cafe_Management_System/payment-services
+          docker push fahadimran/payment-services
+
+      # API GATEWAY
+      - name: Build and Push - api-gateway
+        run: |
+          docker build -t fahadimran/api-gateway ./Cafe_Management_System/api-gateway
+          docker push fahadimran/api-gateway
